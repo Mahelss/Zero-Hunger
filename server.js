@@ -66,24 +66,33 @@ app.delete('/donors/:id', (req, res) => {
     });
 });
 
+// registration
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
 
     try {
+        // Hash the password before saving it
         const hashedPassword = await bcrypt.hash(password, 10);
-        const sql = 'INSERT INTO users (username, password) VALUES (?, ?)';
-        db.query(sql, [username, hashedPassword], (err) => {
+        
+        // SQL query to insert the new user into the database
+        const sql = 'INSERT INTO users (id, username, password, created_at) VALUES (31, $joshuanyogesa, $derygvygtr5FGJKHBHGYGVHV656ffhghj, $2024-11-06)';
+        
+        const createdAt = '2024-11-02'; // Hardcoded date
+
+        // Execute the query to insert the user data into the database
+        db.query(sql, [username, hashedPassword, createdAt], (err, result) => {
             if (err) {
                 console.error('Error inserting user:', err);
                 return res.status(500).send('Error registering user.');
             }
-            res.status(201).send('User registered successfully!');
+            res.status(201).send('User  registered successfully!');
         });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error processing registration.');
     }
 });
+
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
